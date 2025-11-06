@@ -1,0 +1,520 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haramaya University Student Union & Club Association Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c5aa0">
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader">
+            <i class="fas fa-university"></i>
+            <p>Loading HU Student Union System...</p>
+        </div>
+    </div>
+
+    <!-- Login Modal (Initial Screen) -->
+    <div id="login-modal" class="modal full-screen-modal active">
+        <div class="modal-content login-content">
+            <div class="login-left">
+                <img src="https://via.placeholder.com/400x600?text=HU+Logo" alt="HU Logo" class="login-logo">
+            </div>
+            <div class="login-right">
+                <h2>Welcome to HU Student Union</h2>
+                <p>Secure Access to Management System</p>
+                <form id="login-form" class="form">
+                    <div class="form-group">
+                        <label for="username"><i class="fas fa-user"></i> Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">Login</button>
+                    <a href="#" id="demo-login" class="demo-link">Demo Access</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="header" style="display: none;">
+        <div class="container">
+            <div class="logo">
+                <img src="https://via.placeholder.com/60x60?text=HU" alt="Haramaya University Logo" class="logo-img">
+                <h1>Haramaya University Student Union</h1>
+                <span class="tagline">Building the Basis for Development</span>
+            </div>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="#dashboard" class="nav-link active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#members" class="nav-link"><i class="fas fa-users"></i> Members</a></li>
+                    <li><a href="#events" class="nav-link"><i class="fas fa-calendar-alt"></i> Events</a></li>
+                    <li><a href="#elections" class="nav-link"><i class="fas fa-vote-yea"></i> Elections</a></li>
+                    <li><a href="#database" class="nav-link"><i class="fas fa-database"></i> Database</a></li>
+                    <li><a href="#project" class="nav-link"><i class="fas fa-file-alt"></i> Project Docs</a></li>
+                    <li><a href="#profile" class="nav-link"><i class="fas fa-user-circle"></i> Profile</a></li>
+                </ul>
+                <button id="menu-toggle" class="menu-toggle"><i class="fas fa-bars"></i></button>
+                <div class="header-right">
+                    <button id="dark-mode-toggle" class="btn btn-secondary" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+                    <button id="notifications-btn" class="btn btn-info" title="Notifications"><i class="fas fa-bell"></i><span id="notif-count">0</span></button>
+                    <button id="logout-btn" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Notification Toast -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Notifications Dropdown -->
+    <div id="notifications-dropdown" class="dropdown" style="display: none;">
+        <div class="dropdown-content">
+            <h4>Notifications</h4>
+            <ul id="notif-list"></ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main" id="main" style="display: none;">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <div class="container">
+                <div class="hero-banner">
+                    <h2>Welcome Back, <span id="welcome-name">Admin!</span></h2>
+                    <p id="current-time">Overview of Student Union Activities - October 21, 2025</p>
+                    <button id="refresh-dashboard" class="btn btn-primary">Refresh Data</button>
+                </div>
+                <div class="dashboard-grid" id="dashboard-grid">
+                    <div class="card animated-card" data-aos="fade-up">
+                        <div class="card-icon"><i class="fas fa-users"></i></div>
+                        <h3>Total Members</h3>
+                        <p class="counter" data-target="1250">0</p>
+                        <small>Active Students</small>
+                    </div>
+                    <div class="card animated-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="card-icon"><i class="fas fa-calendar-alt"></i></div>
+                        <h3>Upcoming Events</h3>
+                        <p class="counter" data-target="15">0</p>
+                        <small>Scheduled Activities</small>
+                    </div>
+                    <div class="card animated-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card-icon"><i class="fas fa-vote-yea"></i></div>
+                        <h3>Active Elections</h3>
+                        <p class="counter" data-target="3">0</p>
+                        <small>Ongoing Votes</small>
+                    </div>
+                    <div class="card animated-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3>Engagement Rate</h3>
+                        <p class="counter" data-target="85">0</p><span>%</span>
+                        <small>Participation Level</small>
+                    </div>
+                </div>
+                <div class="stats-charts">
+                    <div class="chart-card">
+                        <h3>Member Growth Over Time</h3>
+                        <canvas id="memberGrowthChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Event Attendance</h3>
+                        <canvas id="eventAttendanceChart"></canvas>
+                    </div>
+                </div>
+                <div class="recent-activity animated-card" data-aos="fade-up" data-aos-delay="400">
+                    <h3>Recent Activity Feed</h3>
+                    <div class="activity-timeline">
+                        <div class="activity-item">
+                            <div class="activity-icon"><i class="fas fa-user-plus"></i></div>
+                            <div class="activity-content">
+                                <h4>New Member Registered</h4>
+                                <p>Eyerusalem Alemayehu joined the union - 2 hours ago</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon"><i class="fas fa-calendar-check"></i></div>
+                            <div class="activity-content">
+                                <h4>Event Scheduled</h4>
+                                <p>Cultural Day event confirmed for November 15 - 1 day ago</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon"><i class="fas fa-vote-yea"></i></div>
+                            <div class="activity-content">
+                                <h4>Election Update</h4>
+                                <p>Voting for President started - 3 days ago</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon"><i class="fas fa-chart-bar"></i></div>
+                            <div class="activity-content">
+                                <h4>Analytics Report</h4>
+                                <p>Monthly engagement report generated - 1 week ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Widget Area for Dashboard -->
+                <div class="widget-area" data-aos="fade-up" data-aos-delay="500">
+                    <h3>Custom Widgets</h3>
+                    <div id="widgets-container" class="widgets-grid">
+                        <!-- Widgets will be draggable and added dynamically -->
+                    </div>
+                    <button id="add-widget" class="btn btn-primary">Add Widget</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Members Section -->
+        <section id="members" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Members Management</h2>
+                    <div class="header-actions">
+                        <div class="search-wrapper">
+                            <input type="text" id="search-members" placeholder="Search by name or ID..." class="search-input">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <select id="filter-status" class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                        <button id="add-member-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Add Member</button>
+                        <button id="upload-members" class="btn btn-secondary"><i class="fas fa-upload"></i> Upload CSV</button>
+                        <button id="export-members" class="btn btn-secondary"><i class="fas fa-download"></i> Export PDF</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table sortable">
+                        <thead>
+                            <tr>
+                                <th data-sort="id">ID <i class="fas fa-sort"></i></th>
+                                <th data-sort="name">Name <i class="fas fa-sort"></i></th>
+                                <th data-sort="dept">Department <i class="fas fa-sort"></i></th>
+                                <th data-sort="status">Status <i class="fas fa-sort"></i></th>
+                                <th data-sort="joinDate">Join Date <i class="fas fa-sort"></i></th>
+                                <th>Photo</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="members-table-body">
+                            <!-- Dynamic -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button id="prev-page" class="btn btn-sm">Previous</button>
+                    <span id="page-info">Page 1 of 5</span>
+                    <button id="next-page" class="btn btn-sm">Next</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Event Management</h2>
+                    <div class="header-actions">
+                        <div class="search-wrapper">
+                            <input type="text" id="search-events" placeholder="Search events..." class="search-input">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <select id="filter-event-type" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="Cultural">Cultural</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Workshop">Workshop</option>
+                        </select>
+                        <button id="add-event-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Add Event</button>
+                        <button id="calendar-view" class="btn btn-secondary"><i class="fas fa-calendar"></i> Calendar</button>
+                        <button id="export-events" class="btn btn-secondary"><i class="fas fa-download"></i> Export</button>
+                    </div>
+                </div>
+                <div class="events-grid" id="events-grid">
+                    <!-- Dynamic -->
+                </div>
+                <!-- Calendar Modal -->
+                <div id="calendar-modal" class="modal">
+                    <div class="modal-content large">
+                        <span class="close">&times;</span>
+                        <h3>Event Calendar</h3>
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Elections Section -->
+        <section id="elections" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Election Management</h2>
+                    <div class="header-actions">
+                        <button id="start-election-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Start Election</button>
+                        <button id="view-results" class="btn btn-secondary"><i class="fas fa-chart-bar"></i> View Results</button>
+                        <button id="send-reminder" class="btn btn-info"><i class="fas fa-envelope"></i> Send Reminder</button>
+                    </div>
+                </div>
+                <div class="elections-grid">
+                    <!-- Dynamic -->
+                </div>
+                <div class="election-results" id="election-results" style="display: none;">
+                    <h3>Election Results</h3>
+                    <canvas id="electionResultsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Database Section -->
+        <section id="database" class="section">
+            <div class="container">
+                <h2>Database Overview</h2>
+                <div class="db-tabs">
+                    <button class="tab-btn active" data-tab="er-diagram">ER Diagram</button>
+                    <button class="tab-btn" data-tab="normalization">Normalization</button>
+                    <button class="tab-btn" data-tab="tables">Tables</button>
+                    <button class="tab-btn" data-tab="queries">SQL Queries</button>
+                    <button class="tab-btn" data-tab="audit">Audit Log</button>
+                </div>
+                <div class="tab-content">
+                    <div id="er-diagram" class="tab-pane active">
+                        <h3>Entity-Relationship Diagram</h3>
+                        <div class="diagram-placeholder">
+                            <img src="https://via.placeholder.com/800x400?text=ER+Diagram" alt="ER Diagram">
+                            <p>Entities: Students, Events, Memberships, Departments</p>
+                        </div>
+                    </div>
+                    <div id="normalization" class="tab-pane">
+                        <h3>Normalization Process</h3>
+                        <div class="normalization-steps">
+                            <div class="step">
+                                <h4>1NF - Unnormalized to First Normal Form</h4>
+                                <table class="mini-table">
+                                    <thead><tr><th>Student ID</th><th>Name</th><th>Events Attended</th></tr></thead>
+                                    <tbody><tr><td>1181/16</td><td>Eyerusalem</td><td>Cultural Day, Sports</td></tr></tbody>
+                                </table>
+                            </div>
+                            <div class="step">
+                                <h4>2NF - Removing Partial Dependencies</h4>
+                                <table class="mini-table">
+                                    <thead><tr><th>Event ID</th><th>Event Name</th></tr></thead>
+                                    <tbody><tr><td>1</td><td>Cultural Day</td></tr></tbody>
+                                </table>
+                            </div>
+                            <div class="step">
+                                <h4>3NF - Removing Transitive Dependencies</h4>
+                                <p>Final normalized tables for Students, Events, etc.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tables" class="tab-pane">
+                        <h3>Database Tables</h3>
+                        <div class="table-list">
+                            <div class="table-item">
+                                <h4>Students Table</h4>
+                                <table class="mini-table"><thead><tr><th>ID</th><th>Name</th><th>Dept</th></tr></thead><tbody><tr><td>1181/16</td><td>Eyerusalem Alemayehu</td><td>IS</td></tr></tbody></table>
+                            </div>
+                            <!-- More tables dynamically loaded -->
+                        </div>
+                    </div>
+                    <div id="queries" class="tab-pane">
+                        <h3>Sample SQL Queries</h3>
+                        <div class="query-editor">
+                            <textarea id="sql-editor" placeholder="Enter SQL query here...">SELECT * FROM Students WHERE status = 'Active';</textarea>
+                            <button id="run-query" class="btn btn-primary">Run Query</button>
+                            <div id="query-result"></div>
+                        </div>
+                    </div>
+                    <div id="audit" class="tab-pane">
+                        <h3>Audit Log</h3>
+                        <table class="data-table">
+                            <thead><tr><th>Action</th><th>User</th><th>Timestamp</th></tr></thead>
+                            <tbody id="audit-log-body">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Docs Section -->
+        <section id="project" class="section">
+            <div class="container">
+                <h2>Project Documentation</h2>
+                <div class="project-toc">
+                    <h3>Table of Contents</h3>
+                    <ul>
+                        <li><a href="#ch1">Chapter 1: Introduction</a></li>
+                        <li><a href="#ch2">Chapter 2: System Analysis</a></li>
+                        <li><a href="#ch3">Chapter 3: Design</a></li>
+                        <li><a href="#ch4">Chapter 4: Implementation</a></li>
+                        <li><a href="#team">Team Members</a></li>
+                    </ul>
+                </div>
+                <div id="ch1" class="project-chapter">
+                    <h3>Chapter 1: Introduction</h3>
+                    <p>Background of HU Student Union... (Detailed content from SAD PDF)</p>
+                </div>
+                <div id="ch2" class="project-chapter" style="display: none;">
+                    <h3>Chapter 2: System Analysis</h3>
+                    <p>Requirements gathering and analysis...</p>
+                </div>
+                <div id="ch3" class="project-chapter" style="display: none;">
+                    <h3>Chapter 3: Design</h3>
+                    <p>Diagrams and models...</p>
+                </div>
+                <div id="ch4" class="project-chapter" style="display: none;">
+                    <h3>Chapter 4: Implementation</h3>
+                    <p>Future predictions and limitations...</p>
+                </div>
+                <div id="team" class="team-section">
+                    <h3>Project Team</h3>
+                    <div class="team-grid">
+                        <div class="team-member">
+                            <img src="https://via.placeholder.com/150?text=EA" alt="Eyerusalem">
+                            <h4>Eyerusalem Alemayehu</h4>
+                            <p>ID: 1181/16</p>
+                        </div>
+                        <div class="team-member">
+                            <img src="https://via.placeholder.com/150?text=HA" alt="Heaven">
+                            <h4>Heaven Abera</h4>
+                            <p>ID: 1550/16</p>
+                        </div>
+                        <div class="team-member">
+                            <img src="https://via.placeholder.com/150?text=HR" alt="Hikma">
+                            <h4>Hikma Reshad</h4>
+                            <p>ID: 1582/16</p>
+                        </div>
+                        <div class="team-member">
+                            <img src="https://via.placeholder.com/150?text=SF" alt="Sifan">
+                            <h4>Sifan Feyisa</h4>
+                            <p>ID: 2458/16</p>
+                        </div>
+                        <div class="team-member">
+                            <img src="https://via.placeholder.com/150?text=TT" alt="Tewodros">
+                            <h4>Tewodros Tesfaye</h4>
+                            <p>ID: 2562/16</p>
+                        </div>
+                        <div class="team-member">
+                            <img src="https://via.placeholder.com/150?text=YD" alt="Yohannes D">
+                            <h4>Yohannes Dawit</h4>
+                            <p>ID: 2733/16</p>
+                        </div>
+                        <div class="team-member">
+                            <img src="https://via.placeholder.com/150?text=YS" alt="Yohannes S">
+                            <h4>Yohannes Sleshi</h4>
+                            <p>ID: 2735/16</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="section">
+            <div class="container">
+                <h2>User Profile</h2>
+                <div class="profile-grid">
+                    <div class="profile-card">
+                        <div class="profile-upload">
+                            <img id="profile-pic" src="https://via.placeholder.com/200?text=Admin" alt="Profile Pic" class="profile-pic">
+                            <input type="file" id="photo-upload" accept="image/*" style="display: none;">
+                            <button id="upload-photo-btn" class="btn btn-secondary">Upload Photo</button>
+                        </div>
+                        <h3 id="profile-name">Admin User</h3>
+                        <p id="profile-role">Administrator</p>
+                        <button id="edit-profile" class="btn btn-primary">Edit Profile</button>
+                    </div>
+                    <form id="profile-form" class="form" style="display: none;">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" value="Admin User">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" value="admin@haramaya.edu.et">
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select id="role">
+                                <option value="admin">Admin</option>
+                                <option value="member">Member</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">New Password</label>
+                            <input type="password" id="password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="button" id="cancel-edit" class="btn btn-secondary">Cancel</button>
+                    </form>
+                </div>
+                <div class="profile-stats">
+                    <h3>Activity Log</h3>
+                    <ul id="activity-log">
+                        <!-- Dynamic -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Generic Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="modal-title">Modal Title</h3>
+            <div id="modal-body">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Haramaya University</h4>
+                    <p>College of Computing and Informatics</p>
+                    <p>Department of Information Systems</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Project</h4>
+                    <p>Student Union Management System</p>
+                    <p>Submitted: June 2025</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: info@haramaya.edu.et</p>
+                    <p>Phone: +251-xxx-xxx</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Haramaya University. All rights reserved. | Developed by IS Students</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
